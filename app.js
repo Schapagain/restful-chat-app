@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 global.appRoot = path.resolve(__dirname);
 
 // App routes
@@ -14,9 +14,9 @@ const chatRoutes = require('./api/routes/chats');
 // Log all incoming requests before handling them
 app.use(morgan('dev'));
 
-// User bodyParser to parse urencoded json data
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+// User express to parse urlencodings and json data
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 
 // Enable Cross Origin Sharing for everyone
 app.use((req,res,next) => {

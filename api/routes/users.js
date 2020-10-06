@@ -14,19 +14,23 @@ router.get('/',(req,res,next) => {
     const queryString = "SELECT * FROM users";
     db.query(queryString,(err,result)=>{
         if (err) {
-            next(err);
-        }
-
-        if (!result.rowCount){
-            res.status(404).json({
-                message: "There are no users in the system",
+            console.log(err);
+            res.status(500).json({
+                error: err,
             });
         }else{
-            res.status(201).json({
-                message: "These are all the users:",
-                users: result.rows,
-        });
-        }
+
+            if (!result.rowCount){
+                res.status(404).json({
+                    message: "There are no users in the system",
+                });
+            }else{
+                res.status(201).json({
+                    message: "These are all the users:",
+                    users: result.rows,
+                });
+            }
+        };
     });  
 });
 
@@ -47,11 +51,12 @@ router.post('/',(req,res,next) => {
             res.status(500).json({
                 error: err,
             });
-        }
-        res.status(201).json({
-            message: "User was added successfully",
-            user: result.rows[0],
-        });
+        }else{
+            res.status(201).json({
+                message: "User was added successfully",
+                user: result.rows[0],
+            });
+        };
     });
 
 });
@@ -67,44 +72,52 @@ router.get('/:userId', (req,res,next) => {
             res.status(500).json({
                 error: err,
             });
-        }
-
-        if (!result.rowCount){
-            res.status(404).json({
-                message: "User not found",
-            });
         }else{
-            res.status(201).json({
-                message: "User was found",
-                user: result.rows[0],
-        });
-        }
+            if (!result.rowCount){
+                res.status(404).json({
+                    message: "User not found",
+                });
+            }else{
+                res.status(201).json({
+                    message: "User was found",
+                    user: result.rows[0],
+                });
+            }
+        };
     }); 
 });
 
 router.patch('/:userId', (req,res,next) => {
     const userId = req.params.userId;
-    const queryString = "DELETE FROM users WHERE id=$1 RETURNING *";
+
+    const fieldSpaceValues = 
+    Object
+        .keys(req.body)
+        .map(key => 
+        key.concat('=\'',req.body[key],'\''))
+        .join(', ');
+
+    const queryString = "update users set ".concat(fieldSpaceValues,' ','WHERE id=$1 RETURNING *');
     const queryValues = [userId];
 
     db.query(queryString,queryValues,(err,result)=>{
         if (err) {
             console.log(err);
             res.status(500).json({
-                error: err,
-            });
-        }
-
-        if (!result.rowCount){
-            res.status(404).json({
-                message: "User not found",
+                error: err.message,
             });
         }else{
-            res.status(201).json({
-                message: "User was removed successfully",
-                user: result.rows[0],
-        });
-        }
+            if (!result || !result.rowCount){
+                res.status(404).json({
+                    message: "User not found",
+                });
+            }else{
+                res.status(201).json({
+                    message: "User was updated successfully",
+                    user: result.rows[0],
+                });
+            }
+        };
     });  
 });
 
