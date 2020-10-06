@@ -90,6 +90,7 @@ router.get('/:userId', (req,res,next) => {
 router.patch('/:userId', (req,res,next) => {
     const userId = req.params.userId;
 
+    // Create comma seperated column='value' strings for all column: value pairs
     const fieldSpaceValues = 
     Object
         .keys(req.body)
