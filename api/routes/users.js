@@ -10,12 +10,13 @@ router.get('/',(req,res,next) => {
 
 router.post('/',(req,res,next) => {
     const user = {
-        username: req.body.username,
-        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        cellNumber: req.body.cellNumber,
     }
     res.status(201).json({
         message: "User was created",
-        createUser: user,
+        user,
     })
 });
 

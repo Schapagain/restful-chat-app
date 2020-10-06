@@ -5,10 +5,11 @@ const bodyParser = require('body-parser');
 
 const userRoutes = require('./api/routes/users');
 const chatRoutes = require('./api/routes/chats');
-const { reset } = require('nodemon');
 
 // Log all incoming requests before handling them
 app.use(morgan('dev'));
+
+// User bodyParser to parse urencoded json data
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -20,7 +21,7 @@ app.use((req,res,next) => {
     // Handle initial OPTIONS request
     if (req.method === "OPTIONS") {
         res.header('Access-Control-Allow-Methods','GET, POST, PATCH, PUT, DELETE');
-        return reset.status(200).json({});
+        return res.status(200).json({});
     }
     next();
 });
