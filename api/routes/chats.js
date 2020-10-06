@@ -9,8 +9,14 @@ router.get('/',(req,res,next) => {
 });
 
 router.post('/',(req,res,next) => {
+    const chat = {
+        sender: req.body.sender,
+        message: req.body.message, 
+    }
+    console.log(chat);
     res.status(201).json({
-        message: "Chat was created"
+        message: "Chat was created",
+        chat,
     })
 });
 
