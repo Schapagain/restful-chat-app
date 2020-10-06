@@ -1,0 +1,23 @@
+{
+  "name": "restful-chat-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "server.js"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api",
+    "socket.io"
+  ],
+  "author": "Sandesh Chapagain",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
