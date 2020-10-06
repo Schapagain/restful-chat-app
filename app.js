@@ -1,8 +1,13 @@
+require('dotenv').config()
+
+const path = require('path');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+global.appRoot = path.resolve(__dirname);
 
+// App routes
 const userRoutes = require('./api/routes/users');
 const chatRoutes = require('./api/routes/chats');
 

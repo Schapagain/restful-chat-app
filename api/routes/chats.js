@@ -1,6 +1,10 @@
+const path = require('path');
 const express = require('express');
 const router = express.Router();
 
+// Database connection
+const appRoot = path.dirname(require.main.filename);
+const db = require(appRoot.concat('/db'));
 
 router.get('/',(req,res,next) => {
     res.status(200).json({
