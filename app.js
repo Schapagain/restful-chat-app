@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-app.use((req,res,next) => {
-    res.status(200).json({
-        message: 'It works!'
-    });
-});
+const userRoutes = require('./api/routes/users');
+const chatRoutes = require('./api/routes/chats');
+
+app.use('/users', userRoutes);
+app.use('/chats',chatRoutes);
 
 module.exports = app;
