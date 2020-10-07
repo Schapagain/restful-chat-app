@@ -117,31 +117,34 @@ const checkUserExistence = username => {
         })
 }
 
-// router.delete('/:username', (req,res,next) => {
-//     const username = req.params.username;
-//     const queryString = "DELETE FROM users WHERE username=$1 RETURNING *";
-//     const queryValues = [username];
+router.delete('/:username', (req,res,next) => {
+    const username = req.params.username;
+    const allChats = {};
+    removeChatsFromDb(username,true)
+    .then ( (result) => {
+        allChats.sent = result.rows;
+        removeChatsFromDb(username,false)
+        .then( (result) => {
+            allChats.received = result.rows;
+            res.status(200).json({
+                message: "Chat deleted successfully",
+                chats: allChats,
+            })
+        })
+    })
+    .catch( err => {
+        console.log(err)
+        res.status(500).json({
+            message: "Could not remove chats",
+            error: err.message,
+        })
+    })
+});
 
-//     db.query(queryString,queryValues)
-//     .then( result => {
-
-//         if (!result.rowCount){
-//             res.status(404).json({
-//                 message: "User not found",
-//             });
-//         }else{
-//             res.status(201).json({
-//                 message: "User was removed successfully",
-//                 user: result.rows[0],
-//             });
-//         }
-//     })
-//     .catch(err => {
-//         console.log(err);
-//         res.status(500).json({
-//             error: err,
-//         });
-//     });
-// });
+const removeChatsFromDb = (username,isSender) => {
+    const queryString =`DELETE FROM chats WHERE ${isSender?'sender':'receiver'}=$1 RETURNING *`;
+    const queryValues = [username];
+    return db.query(queryString,queryValues)
+}
 
 module.exports = router;
