@@ -12,21 +12,32 @@ router.post('/',(req,res,next) => {
     ({username,password} = req.body);
 
    registerUser({username,password})
-        .then( result => {
-            res.status(201).json({
-                    message: "User registered successfully",
-                    result,
-            })
+
+    .then(result => {
+        initUserProfile(result.username)
+        res.status(201).json({
+            message: "User registered successfully",
+            result,
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                message: "Could not add user",
-                error: err.message,
-            })
-        }); 
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            message: "Could not add user",
+            error: err.message,
+        })
+    }); 
 
 });
+
+const initUserProfile = username => {
+    const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber) VALUES ($1,$2,$3,$4)";
+    const queryValues = [username,'','',''];
+    return db
+        .query(queryString,queryValues)
+        .then(result => result.rows[0])
+}
+
 
 const registerUser = user => {
     const newUsername = user.username;

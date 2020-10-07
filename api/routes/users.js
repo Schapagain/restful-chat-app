@@ -23,42 +23,15 @@ router.get('/',(req,res,next) => {
     .catch(err => {
         console.log(err);
         res.status(500).json({
-            error: err,
+            error: err.message,
         });
     }); 
 });
 
-router.post('/',(req,res,next) => {
-    const firstName = req.body.firstname;
-    const lastName = req.body.lastname;
-    const cellNumber = req.body.cellnumber;
-
-    // Generate random 32 bytes buffer and store as a string id
-    // Remove all occurences of / in id since that will be taken as a different route by express
-    const userId = secureRandom(32,{type: 'Buffer'}).toString('base64').replace(/\//g,'');
-    const queryString = "INSERT INTO users(firstname,lastname,cellnumber,id) VALUES($1,$2,$3,$4) returning *";
-    const queryValues = [firstName,lastName,cellNumber,userId];
-
-    db.query(queryString,queryValues)
-    .then(result =>{
-        res.status(201).json({
-            message: "User was added successfully",
-            user: result.rows[0],
-        });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err,
-        });
-    });
-
-});
-
-router.get('/:userId', (req,res,next) => {
-    const userId = req.params.userId;
-    const queryString = "SELECT * FROM users WHERE id=$1";
-    const queryValues = [userId];
+router.get('/:username', (req,res,next) => {
+    const username = req.params.username;
+    const queryString = "SELECT * FROM users WHERE username=$1";
+    const queryValues = [username];
 
     db.query(queryString,queryValues)
     .then(result => {
@@ -76,13 +49,13 @@ router.get('/:userId', (req,res,next) => {
     .catch(err => {
         console.log(err);
         res.status(500).json({
-            error: err,
+            error: err.message,
         });
     });
 });
 
-router.patch('/:userId', (req,res,next) => {
-    const userId = req.params.userId;
+router.patch('/:username', (req,res,next) => {
+    const username = req.params.username;
 
     // Create comma seperated column='value' strings for all column: value pairs
     const fieldSpaceValues = 
@@ -92,8 +65,8 @@ router.patch('/:userId', (req,res,next) => {
         key.concat('=\'',req.body[key],'\''))
         .join(', ');
 
-    const queryString = "update users set ".concat(fieldSpaceValues,' ','WHERE id=$1 RETURNING *');
-    const queryValues = [userId];
+    const queryString = "update users set ".concat(fieldSpaceValues,' ','WHERE username=$1 RETURNING *');
+    const queryValues = [username];
 
     db.query(queryString,queryValues)
     .then( result => {
@@ -111,15 +84,15 @@ router.patch('/:userId', (req,res,next) => {
     .catch(err => {
         console.log(err);
         res.status(500).json({
-            error: err,
+            error: err.message,
         });
     });
 });
 
-router.delete('/:userId', (req,res,next) => {
-    const userId = req.params.userId;
-    const queryString = "DELETE FROM users WHERE id=$1 RETURNING *";
-    const queryValues = [userId];
+router.delete('/:username', (req,res,next) => {
+    const username = req.params.username;
+    const queryString = "DELETE FROM users WHERE username=$1 RETURNING *";
+    const queryValues = [username];
 
     db.query(queryString,queryValues)
     .then( result => {
