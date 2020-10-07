@@ -28,7 +28,6 @@
   PGDATABASE=(process.env.USER)
   PGPASSWORD=(null)
   ```
-3. 
 
 4. Install dependencies listed in package.json. <br/> (Running the following command while on the root repo directory will automatically install all dependencies.)
   ```
