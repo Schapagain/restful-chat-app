@@ -52,14 +52,14 @@ router.get('/:username',verifyAuthToken, (req,res,next) => {
     });
 });
 
-router.patch('/:username',upload.single('profile-picture'),(req,res,next) => {
+router.patch('/:username',verifyAuthToken,upload.single('profile-picture'),(req,res,next) => {
     const username = req.params.username;
     const profilePicture = req.file;
 
     // Inject name of the profile picture stored if a valid image was given
     if(profilePicture != null) {
         const extension = profilePicture.originalname.split('.').pop();
-        const profilePictureName = username.concat('.',extension);
+        const profilePictureName = appRoot.concat('/uploads/',username,'.',extension);
         req.body.profilepicture = profilePictureName;
     };
 
@@ -96,7 +96,7 @@ router.patch('/:username',upload.single('profile-picture'),(req,res,next) => {
     });
 });
 
-router.delete('/:username', (req,res,next) => {
+router.delete('/:username',verifyAuthToken, (req,res,next) => {
     const username = req.params.username;
     const queryString = "DELETE FROM users WHERE username=$1 RETURNING *";
     const queryValues = [username];

@@ -33,7 +33,7 @@ router.post('/',(req,res,next) => {
 
 const initUserProfile = username => {
     const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber,profilepicture) VALUES ($1,$2,$3,$4,$5)";
-    const queryValues = [username,'','','','dummy.jpeg'];
+    const queryValues = [username,'','','',appRoot.concat('/uploads/dummy.jpeg')];
     return db
         .query(queryString,queryValues)
         .then(result => result.rows[0])
