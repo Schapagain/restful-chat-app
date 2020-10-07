@@ -3,16 +3,17 @@ const path = require('path');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-
 // Database connection
 const appRoot = path.dirname(require.main.filename);
 const db = require(appRoot.concat('/db'));
 
 router.post('/',(req,res,next) => {
     ({username,password} = req.body);
+    if (!username || !password){
+        throw new Error("Username and password are required");
+    }
 
    registerUser({username,password})
-
     .then(result => {
         initUserProfile(result.username)
         res.status(201).json({
@@ -31,8 +32,8 @@ router.post('/',(req,res,next) => {
 });
 
 const initUserProfile = username => {
-    const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber) VALUES ($1,$2,$3,$4)";
-    const queryValues = [username,'','',''];
+    const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber,profilepicture) VALUES ($1,$2,$3,$4,$5)";
+    const queryValues = [username,'','','','dummy.jpeg'];
     return db
         .query(queryString,queryValues)
         .then(result => result.rows[0])
