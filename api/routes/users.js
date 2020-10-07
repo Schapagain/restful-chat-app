@@ -64,7 +64,9 @@ router.patch('/:username', (req,res,next) => {
         .map(key => 
         key.concat('=\'',req.body[key],'\''))
         .join(', ');
-
+    if (!fieldSpaceValues) {
+        throw new Error('Nothing to update');
+    }
     const queryString = "update users set ".concat(fieldSpaceValues,' ','WHERE username=$1 RETURNING *');
     const queryValues = [username];
 
