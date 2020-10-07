@@ -44,6 +44,9 @@
 
 ## \# Usage via HTTP
 
+** Authorization via token in http header required for access.
+> Login as a valid user to get a token (User Handling #2 below)
+
 ### User Handling
 1. Register users
 
@@ -53,14 +56,23 @@
   * **Return**: { message, result { username} }
   * **Example**:  `[POST] /register`
 
-2. Get all users
+2. Login users
+
+  * **Endpoint**: /login
+  * **Method**: POST
+  * **Payload**: { username ,password }
+  * **Return**: { message, token }
+  * **Example**:  `[POST] /login`
+
+
+3. Get all users
 
   * **Endpoint**: /users
   * **Method**: GET
   * **Return**: { message, users [ { firstname, lastname, cellnumber, username } ] }
   * **Example**:  `[GET] /users`
 
-3. Get user by username
+4. Get user by username
 
   * **Endpoint**: /users
   * **Method**: GET
@@ -68,7 +80,7 @@
   * **Return**: { message, user { firstname, lastname, cellnumber, username } }
   * **Example**:  `[GET] /users/bob123`
 
- 4. Update user info
+ 5. Update user info
 
   * **Endpoint**: /users
   * **Method**: PATCH
@@ -78,7 +90,7 @@
   * **Example**:  `[PATCH] /users/bob123` 
   * **Note**: Any number of key:value pairs can be passed
 
-5. Remove user
+6. Remove user
 
   * **Endpoint**: /users
   * **Method**: DELETE
@@ -107,3 +119,12 @@
   * **URL param**: username
   * **Return**: { message, chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
   * **Example**:  `[GET] /chats/marty123`
+
+4. Delete chat by username
+
+  * **Endpoint**: /chats
+  * **Method**: DELETE
+  * **URL param**: username
+  * **Return**: { message, chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
+  * **Example**:  `[DELETE] /chats/marty123`
+  * **Note**: This request deletes messages both sent and received by the user
