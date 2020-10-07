@@ -13,8 +13,20 @@ const storage = multer.diskStorage({
         cb(null,req.params.username.concat('.',extension));
     },
 });
+
+const fileFilter = (req,file,cb) => {
+    const acceptedFileTypes = new Set(['image/jpg','image/png','image/jpeg']);
+    if(acceptedFileTypes.has(file.mimetype)){
+        cb(null,true);
+    }else{
+        cb(new Error('Unacceptable image type. only jpg, jpeg and png supported.'));
+    }
+
+};
+
 const limits = {
     fileSize: 1024*1024*10,
 };
-var upload = multer({storage,limits});
+
+var upload = multer({storage,limits,fileFilter});
 module.exports = upload;

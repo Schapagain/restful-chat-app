@@ -1,14 +1,10 @@
 
 const path = require('path');
+const appRoot = path.dirname(require.main.filename);
 const express = require('express');
 const router = express.Router();
-const secureRandom = require('secure-random');
-
-// Database connection
-// Using 123 as an id for everyone for now
-// this will be username for users after login
-const appRoot = path.dirname(require.main.filename);
 const db = require(appRoot.concat('/db'));
+const upload = require(appRoot.concat('/utils/image-upload'))
 
 router.get('/',(req,res,next) => {
     const queryString = "SELECT * FROM users";
@@ -40,6 +36,7 @@ router.get('/:username', (req,res,next) => {
                 message: "User not found",
             });
         }else{
+
             res.status(201).json({
                 message: "User was found",
                 user: result.rows[0],
@@ -54,8 +51,9 @@ router.get('/:username', (req,res,next) => {
     });
 });
 
-router.patch('/:username', (req,res,next) => {
+router.patch('/:username',upload.single('profile-picture'),(req,res,next) => {
     const username = req.params.username;
+    const profilePicture = req.file;
 
     // Create comma seperated column='value' strings for all column: value pairs
     const fieldSpaceValues = 
