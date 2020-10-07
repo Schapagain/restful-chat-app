@@ -4,12 +4,12 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-// const bodyParser = require('body-parser');
 global.appRoot = path.resolve(__dirname);
 
 // App routes
 const userRoutes = require('./api/routes/users');
 const chatRoutes = require('./api/routes/chats');
+const registerRoutes = require('./api/routes/register');
 
 // Log all incoming requests before handling them
 app.use(morgan('dev'));
@@ -34,6 +34,7 @@ app.use((req,res,next) => {
 // Use middleware to handle valid routes
 app.use('/users', userRoutes);
 app.use('/chats',chatRoutes);
+app.use('/register',registerRoutes);
 
 // Forward invalid routes to the error handler below
 app.use((req,res,next) => {
@@ -47,7 +48,7 @@ app.use((error,req,res,next) => {
     res.status(error.status || 500);
     res.json({
         error: {
-            message: error.message,
+            message: error.stack,
         }
     });
 });
