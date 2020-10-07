@@ -33,6 +33,7 @@
   ```
   npm install
   ```
+5. Create ```uploads``` folder in the root directory to hold user images
 
 5. Start the development server
   ```
@@ -50,8 +51,7 @@
   * **Method**: POST
   * **Payload**: { username (unique),password }
   * **Return**: { message, result { username} }
-  * **Example Request**:  `[POST] /register`
-  * **Example Payload**: { "username" : "marty123", "password" : "marty345" }
+  * **Example**:  `[POST] /register`
 
 2. Get all users
 
@@ -66,17 +66,16 @@
   * **Method**: GET
   * **URL param**: username
   * **Return**: { message, user { firstname, lastname, cellnumber, username } }
-  * **Example Request**:  `[GET] /users/bob123`
+  * **Example**:  `[GET] /users/bob123`
 
  4. Update user info
 
   * **Endpoint**: /users
   * **Method**: PATCH
   * **URL param**: username
-  * **Payload**: { firstname, lastname, cellnumber }
-  * **Return**: { message, user { firstname, lastname, cellnumber, username } }
-  * **Example Request**:  `[PATCH] /users/bob123` 
-  * **Example Payload**: { "firstname":"bobby", "cellnumber":"4358392212" }
+  * **Payload**: { firstname, lastname, cellnumber, profilepicture }
+  * **Return**: { message, user { firstname, lastname, cellnumber, username, profilepicture } }
+  * **Example**:  `[PATCH] /users/bob123` 
   * **Note**: Any number of key:value pairs can be passed
 
 5. Remove user
@@ -85,7 +84,7 @@
   * **Method**: DELETE
   * **URL param**: username
   * **Return**: { message, user { firstname, lastname, cellnumber, username } }
-  * **Example Request**:  `[DELETE] /users/bob123`
+  * **Example**:  `[DELETE] /users/bob123`
 
 ### Chat handling
 1. Get all chats
@@ -99,7 +98,7 @@
   * **Method**: POST
   * **Payload**: { sender, message, receiver }
   * **Return**: { message, chat { sender, message, receiver } }
-  * **Example Request**:  `[POST] /chats`
+  * **Example**:  `[POST] /chats`
 
 
 3. Get chat by username
@@ -107,4 +106,4 @@
   * **Method**: GET
   * **URL param**: username
   * **Return**: { message, chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
-  * **Example Request**:  `[GET] /chats/marty123`
+  * **Example**:  `[GET] /chats/marty123`
