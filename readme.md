@@ -13,11 +13,11 @@
   \l                  (to view all databases in the server)
   \c {PGDATABASE};    (switch to the newly created database)
 
-  CREATE TABLE users(username text, firstname text, lastname text);
+  CREATE TABLE users(username text, firstname text, lastname text, cellnumber text);
 
   \d+ users;          (to view the table created with their columns)
 
-  CREATE TABLE login(username text, lastname text);
+  CREATE TABLE login(username text, password text);
                       (\d to view all created tables)
   ```
 3. Create a .env file inside repo directory and setup the following environment variables (default):
@@ -43,10 +43,45 @@
 
 ## \# Usage via HTTP
 
-1. Add users
+1. Register users
 
   * **Endpoint**: /register
   * **Method**: POST
   * **Payload**: { username (unique),password }
   * **Return**: { message, result { username} }
-  * Example:  `[POST] /register`
+  * Example Request:  `[POST] /register`
+  * Example Payload: { "username" : "marty123", "password" : "marty345" }
+
+2. Get all users
+
+  * **Endpoint**: /users
+  * **Method**: GET
+  * **Return**: { message, users [ { firstname, lastname, cellnumber, username } ] }
+  * Example:  `[GET] /users`
+
+3. Get user by username
+
+  * **Endpoint**: /users
+  * **Method**: GET
+  * **URL param**: username
+  * **Return**: { message, user { firstname, lastname, cellnumber, username } }
+  * Example:  `[GET] /users/bob123`
+
+ 4. Update user info
+
+  * **Endpoint**: /users
+  * **Method**: PATCH
+  * **URL param**: username
+  * **Payload**: { firstname, lastname, cellnumber }
+  * **Return**: { message, user { firstname, lastname, cellnumber, username } }
+  * Example Request:  `[PATCH] /users/bob123` 
+  * Example Payload: { "firstname":"bobby", "cellnumber":"4358392212" }
+  * Note : Any number of key:value pairs can be passed
+
+5. Remove user
+
+  * **Endpoint**: /users
+  * **Method**: GET
+  * **URL param**: username
+  * **Return**: { message, user { firstname, lastname, cellnumber, username } }
+  * Example:  `[DELETE] /users/bob123`
