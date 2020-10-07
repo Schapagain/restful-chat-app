@@ -81,7 +81,7 @@
 5. Remove user
 
   * **Endpoint**: /users
-  * **Method**: GET
+  * **Method**: DELETE
   * **URL param**: username
   * **Return**: { message, user { firstname, lastname, cellnumber, username } }
   * Example:  `[DELETE] /users/bob123`
