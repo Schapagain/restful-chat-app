@@ -23,6 +23,9 @@ const verifyAuthToken = (req,res,next) => {
         if (req.params.username && tokenUsername != req.params.username){
             throw new Error();
         }
+        if (req.body.sender && tokenUsername != req.body.sender){
+            throw new Error();
+        }
         req.username = tokenUsername;
         next();
     }catch(e){

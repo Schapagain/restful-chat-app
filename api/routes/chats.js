@@ -1,13 +1,11 @@
 
 const path = require('path');
+const appRoot = path.dirname(require.main.filename);
 const express = require('express');
 const router = express.Router();
-const secureRandom = require('secure-random');
+const {verifyAuthToken} = require(appRoot.concat('/utils/authorization'))
 
 // Database connection
-// Using 123 as an id for everyone for now
-// this will be username for users after login
-const appRoot = path.dirname(require.main.filename);
 const db = require(appRoot.concat('/db'));
 
 router.get('/',verifyAuthToken,(req,res,next) => {
