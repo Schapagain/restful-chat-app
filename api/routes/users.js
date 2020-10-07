@@ -109,12 +109,14 @@ router.delete('/:username', (req,res,next) => {
             });
         }else{
             removeUserLogin(username)
-            .then( () => {
-                res.status(201).json({
-                    message: "User was removed successfully",
-                    user: result.rows[0],
-                });
-            })
+            .then( () => removeChatReceived(username)
+                .then( () => {
+                    res.status(200).json({
+                        message : "User removed successfully",
+                        user: result.rows[0],
+                    })
+                })
+            )
         }
     })
     .catch(err => {
@@ -126,9 +128,20 @@ router.delete('/:username', (req,res,next) => {
 });
 
 const removeUserLogin = username => {
-    const queryString = "DELTE from login WHERE username=$1";
+    const queryString = "DELETE from login WHERE username=$1";
     const queryValues = [username];
-    return db.query(queryString,queryValues);
+    return db
+        .query(queryString,queryValues)
+        .catch( err => console.log(err));
+}
+
+const removeChatReceived = username => {
+    const queryString = "DELETE FROM chats WHERE receiver=$1";
+    const queryValues = [username];
+    return db
+        .query(queryString,queryValues)
+        .catch( err => console.log(err));
+
 }
 
 module.exports = router;
