@@ -5,8 +5,9 @@ const express = require('express');
 const router = express.Router();
 const db = require(appRoot.concat('/db'));
 const upload = require(appRoot.concat('/utils/image-upload'))
+const {verifyAuthToken} = require(appRoot.concat('/utils/authorization'))
 
-router.get('/',(req,res,next) => {
+router.get('/',verifyAuthToken,(req,res,next) => {
     const queryString = "SELECT * FROM users";
 
     db.query(queryString)
@@ -24,7 +25,7 @@ router.get('/',(req,res,next) => {
     }); 
 });
 
-router.get('/:username', (req,res,next) => {
+router.get('/:username',verifyAuthToken, (req,res,next) => {
     const username = req.params.username;
     const queryString = "SELECT * FROM users WHERE username=$1";
     const queryValues = [username];

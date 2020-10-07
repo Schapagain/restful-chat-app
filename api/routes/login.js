@@ -1,10 +1,13 @@
 const path = require('path');
+const appRoot = path.dirname(require.main.filename);
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const njwt = require('njwt');
+const {getAuthToken} = require(appRoot.concat('/utils/authorization'));
+
+
 // Database connection
-const appRoot = path.dirname(require.main.filename);
 const db = require(appRoot.concat('/db'));
 
 router.post('/',(req,res,next) => {
@@ -57,11 +60,4 @@ const getUserCredentials = user => {
         .catch ( err => console.log(err.message))
 }
 
-const getAuthToken = username => {
-    const claims = {
-      sub: username,
-    }
-    const token = njwt.create(claims,process.env.PRIVATEKEY);
-    return token.compact();
-}
 module.exports = router;

@@ -10,7 +10,7 @@ const secureRandom = require('secure-random');
 const appRoot = path.dirname(require.main.filename);
 const db = require(appRoot.concat('/db'));
 
-router.get('/',(req,res,next) => {
+router.get('/',verifyAuthToken,(req,res,next) => {
     const queryString = "SELECT * FROM chats";
 
     db.query(queryString)
@@ -28,7 +28,7 @@ router.get('/',(req,res,next) => {
     }); 
 });
 
-router.post('/',(req,res,next) => {
+router.post('/',verifyAuthToken,(req,res,next) => {
     ({sender,receiver,message} = req.body);
 
     if (!sender || !receiver){
@@ -61,7 +61,7 @@ router.post('/',(req,res,next) => {
 
 });
 
-router.get('/:username', (req,res,next) => {
+router.get('/:username',verifyAuthToken, (req,res,next) => {
     const username = req.params.username;
 
     checkUserExistence(username)
@@ -117,7 +117,7 @@ const checkUserExistence = username => {
         })
 }
 
-router.delete('/:username', (req,res,next) => {
+router.delete('/:username',verifyAuthToken, (req,res,next) => {
     const username = req.params.username;
     const allChats = {};
     removeChatsFromDb(username,true)
