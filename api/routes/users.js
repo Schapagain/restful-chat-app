@@ -74,7 +74,6 @@ router.patch('/:username',upload.single('profile-picture'),(req,res,next) => {
     }
     const queryString = "update users set ".concat(fieldValuePairs,' ','WHERE username=$1 RETURNING *');
     const queryValues = [username];
-    console.log(queryString);
     db.query(queryString,queryValues)
     .then( result => {
         if (!result || !result.rowCount){
@@ -109,10 +108,13 @@ router.delete('/:username', (req,res,next) => {
                 message: "User not found",
             });
         }else{
-            res.status(201).json({
-                message: "User was removed successfully",
-                user: result.rows[0],
-            });
+            removeUserLogin(username)
+            .then( () => {
+                res.status(201).json({
+                    message: "User was removed successfully",
+                    user: result.rows[0],
+                });
+            })
         }
     })
     .catch(err => {
@@ -122,5 +124,11 @@ router.delete('/:username', (req,res,next) => {
         });
     });
 });
+
+const removeUserLogin = username => {
+    const queryString = "DELTE from login WHERE username=$1";
+    const queryValues = [username];
+    return db.query(queryString,queryValues);
+}
 
 module.exports = router;
