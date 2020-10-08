@@ -37,7 +37,9 @@ const verifyAuthToken = (req,res,next) => {
 const verifyAuthToken_socket = (req,res,next) => {
 
     try{
+
         const userToken = req.params.token;
+        console.log(userToken);
         const token = njwt.verify(userToken,signingKey);
         const tokenUsername = token.body.sub;
         console.log("Token expires in",token.body.exp);
@@ -45,9 +47,18 @@ const verifyAuthToken_socket = (req,res,next) => {
         req.header.username = tokenUsername;
         next();
     }catch(e){
-        console.log('authorization error:', e.message);
+        console.log('authorization error socket:', e);
         res.redirect('/login');
     }
 }
 
-module.exports = {getAuthToken,verifyAuthToken,verifyAuthToken_socket};
+const getUsernameFromToken = userToken => {
+    try{
+      const token = njwt.verify(userToken,process.env.PRIVATEKEY);
+      return token.body.sub;
+    }catch(e){
+      return null;
+    }
+ }
+
+module.exports = {getAuthToken,verifyAuthToken,verifyAuthToken_socket,getUsernameFromToken};
