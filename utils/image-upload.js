@@ -1,5 +1,6 @@
 
-
+const path = require('path');
+const appRoot = path.dirname(require.main.filename)
 const multer = require('multer');
 const uploadPath = appRoot.concat('/uploads');
 
