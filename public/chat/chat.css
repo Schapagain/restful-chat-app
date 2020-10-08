@@ -62,6 +62,11 @@
         margin:5px;
     }
 
+    .meta-message {
+        color: gray;
+        font-size: x-small;
+    }
+
     #send {
         width: 20%;
         padding: inherit;

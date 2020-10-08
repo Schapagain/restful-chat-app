@@ -15,7 +15,11 @@ socket.on('authorization-failure', result => {
 })
 
 const handleIncomingChatMsg = (msg) => {
-    $('#messages').append($('<li class="other-message">').html(msg.username.concat(' says:','<br/>',msg.message)));
+
+    const messageDiv = $('<li class = "other-message">');
+    const metaMesage = $('<div class = "meta-message">').text(msg.username.concat(' ',getCurrentTime()));
+    const textmessage = $('<div class = "message">').text(msg.message);
+    $('#messages').append(messageDiv.append(metaMesage,textmessage));
 }
 
 const handleOutgoingChatMsg = () => {
@@ -23,7 +27,13 @@ const handleOutgoingChatMsg = () => {
     const userToken = getUserToken();
     socket.emit('chat-message',{message,userToken});
     $('#message').val('');
-    $('#messages').append($('<li class="own-message">').text(message));
+
+    const messageDiv = $('<li class = "own-message">');
+    const metaMesage = $('<div class = "meta-message">').text(getCurrentTime());
+    const textmessage = $('<div class = "message">').text(message);
+    
+    // Add ownmessage to the chat-box
+    $('#messages').append(messageDiv.append(metaMesage,textmessage));
 }
 
 const getUserToken = () => {
@@ -32,3 +42,5 @@ const getUserToken = () => {
     const userToken = parameters.get('token');
     return userToken == null? '':userToken;
 }
+
+const getCurrentTime = () => new Date().toLocaleTimeString();
