@@ -87,21 +87,18 @@
         width: 50%;
     }
 
-    #profile #profile-pic {
+    #profile #profile-pic,#profile-info {
         text-align: center;
-        width: 48%;
-        height: 50%;
+        width: 30%;
+        height: 30%;
         background-color: lightgray;
+    }
+
+    #profile-info {
+        width: 68%;
     }
 
     #profile-pic img {
         display: block;
         width: 100%;
-    }
-
-    #profile #profile-info {
-        text-align: center;
-        width: 48%;
-        height: 50%;
-        background-color: lightblue;
     }
