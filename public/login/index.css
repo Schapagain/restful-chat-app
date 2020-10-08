@@ -1,0 +1,60 @@
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing: border-box;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    #main-cointainer {
+        padding:5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: aquamarine;
+    }
+    
+    #login-panel {
+        background-color: hsl(0,0%,40%);
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        max-width: 500px;
+        align-items: center;
+    }
+
+    #login-panel h1,a {
+        color: ivory;
+        padding: 20px;
+        white-space: nowrap;
+    }
+
+    #login-panel label {
+        margin-bottom: 2px;
+        color: white
+    }
+
+    button {
+        width: 50%;
+        padding: inherit;
+    }
+
+    input {
+        text-align: center;
+        padding: inherit;
+        width: 70%;
+        border-radius: 2px;
+        border:thin;
+        margin:3px;
+    }
+
+    #password {
+        margin-bottom: 5px;
+    }
+    
+    .error-border { 
+        outline: none;
+        border-color: rgb(238, 56, 56);
+        box-shadow: 0 0 10px rgb(238, 56, 56);
+    }

@@ -1,0 +1,23 @@
+<html>
+    <head><title>Login</title>
+        <link rel="icon shortcut" href="../../public/images/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script defer src="index.js"></script>
+    </head>
+    <body>
+        <div id="main-cointainer">
+            <form id = "login-panel" action="">
+                <h1>Chat App</h1>
+                <input id="username" placeholder="Enter your Username" autocomplete="off" required /> 
+                <input id="password" placeholder="Enter your Password" type="password" required/>
+                <label id="error"></label>
+                <button id="login">Login</button>
+                <a id="toggleLoginRegistration" href="">Not a user? Register here.</a>
+            </form>
+            
+        </div>
+    </body>
+    
+</html>

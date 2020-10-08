@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="chat.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script defer src="chat.js"></script>
+    </head>
+    <body>
+        <div id="main-cointainer">
+            <div id = "profile">
+               <div id = "profile-pic">
+                Profile picture
+               </div>
+               <div id = "profile-info">
+                    Info here
+                </div>
+            </div>
+            <div id = "chat-box">
+                <ul id="messages">
+                </ul>
+                <form action="#">
+                    <input id="message" autocomplete="off" required /> 
+                    <button id="send">Send</button>
+                </form>
+            </div>
+        </div>
+    </body>
+
+</html>

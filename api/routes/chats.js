@@ -3,7 +3,7 @@ const path = require('path');
 const appRoot = path.dirname(require.main.filename);
 const express = require('express');
 const router = express.Router();
-const {verifyAuthToken} = require(appRoot.concat('/utils/authorization'))
+const {verifyAuthToken} = require(appRoot.concat('/utils/authorization'));
 
 // Database connection
 const db = require(appRoot.concat('/db'));

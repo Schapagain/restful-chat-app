@@ -1,6 +1,5 @@
 
 const njwt = require('njwt');
-const { request } = require('../app');
 const signingKey = process.env.PRIVATEKEY;
 
 const getAuthToken = username => {
@@ -15,6 +14,7 @@ const getAuthToken = username => {
 const verifyAuthToken = (req,res,next) => {
     try{
         const userToken = req.headers.authorization;
+        console.log(userToken);
         const token = njwt.verify(userToken,signingKey);
         const tokenUsername = token.body.sub;
         console.log("Token expires in",token.body.exp);
@@ -29,10 +29,25 @@ const verifyAuthToken = (req,res,next) => {
         req.username = tokenUsername;
         next();
     }catch(e){
-      res.status(401).json({
-          message: "Unauthorized",
-      })
+        console.log('authorization error:', e.message);
+        res.redirect('/login');
     }
 }
 
-module.exports = {getAuthToken,verifyAuthToken};
+const verifyAuthToken_socket = (req,res,next) => {
+
+    try{
+        const userToken = req.params.token;
+        const token = njwt.verify(userToken,signingKey);
+        const tokenUsername = token.body.sub;
+        console.log("Token expires in",token.body.exp);
+        console.log("Token belongs to",tokenUsername);
+        req.header.username = tokenUsername;
+        next();
+    }catch(e){
+        console.log('authorization error:', e.message);
+        res.redirect('/login');
+    }
+}
+
+module.exports = {getAuthToken,verifyAuthToken,verifyAuthToken_socket};

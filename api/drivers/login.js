@@ -36,7 +36,7 @@ const login_http = (req,res,next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                error: "Authorization not successfull",
+                error: "Authorization not successful",
             })
         }); 
   };
@@ -57,13 +57,15 @@ const login_socket = (socket,user) => {
         .then( passwordMatch => {
             if (passwordMatch){
                 const token = getAuthToken(userReturned.username);
+
                 socket.emit('login-success',{
                 message: "Authorized",
+                username,
                 token,
                 })
             }else{
                 socket.emit('login-failure',{
-                    error: "Authorization not successfull"
+                    error: "Authorization not successful"
                 })
             }
         })

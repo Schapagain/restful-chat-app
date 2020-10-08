@@ -1,16 +1,19 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const path = require('path');
+global.appRoot = path.resolve(__dirname);
+
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-global.appRoot = path.resolve(__dirname);
+const favicon = require('serve-favicon');
+const {verifyAuthToken_socket} = require('./utils/authorization');
 
 // App routes
 const userRoutes = require('./api/routes/users');
 const chatRoutes = require('./api/routes/chats');
 const registerRoutes = require('./api/routes/register');
-const loginRoutes = require('./api/routes/login')
+const loginRoutes = require('./api/routes/login');
 
 // Log all incoming requests before handling them
 app.use(morgan('dev'));
@@ -31,6 +34,12 @@ app.use((req,res,next) => {
     }
     next();
 });
+
+// Serve static files
+app.use('/login',express.static('public/login'));
+app.use('/:token',verifyAuthToken_socket,express.static('public/chat'));
+// Serve favicon
+app.use(favicon('public/images/favicon.ico'));
 
 // Use middleware to handle valid routes
 app.use('/users', userRoutes);
