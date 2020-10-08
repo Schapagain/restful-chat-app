@@ -55,7 +55,7 @@ const register_http = (req,res) => {
 
 const initUserProfile = username => {
     const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber,profilepicture) VALUES ($1,$2,$3,$4,$5)";
-    const queryValues = [username, '', '', '', appRoot.concat('/uploads/dummy.jpeg')];
+    const queryValues = [username, '', '', '', serverAddress.concat('/uploads/dummy.jpeg')];
     return db
         .query(queryString, queryValues)
         .then(result => result.rows[0])
