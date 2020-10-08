@@ -52,3 +52,11 @@ const getUserToken = () => {
 }
 
 const getCurrentTime = () => new Date().toLocaleTimeString();
+
+
+socket.on('get-user-success', user => {
+
+    const profilePicture = user.user.profilepicture;
+    $('#profile-pic').attr('src',profilePicture);
+    
+})
