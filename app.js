@@ -36,13 +36,19 @@ app.use((req,res,next) => {
 
 // Serve static files
 app.use('/login',express.static('public/login'));
-app.use('/:token',verifyAuthToken_socket,express.static('public/chat'));
+
+app.use('/public',express.static('public'))
 
 // Use middleware to handle valid routes
 app.use('/users', userRoutes);
 app.use('/chats',chatRoutes);
 app.use('/register',registerRoutes);
 app.use('/login',loginRoutes);
+
+app.use('/uploads',express.static('uploads'));
+app.use('/:token',verifyAuthToken_socket,express.static('public/chat'));
+app.use('/',verifyAuthToken_socket,express.static('public/chat'));
+
 
 // Forward invalid routes to the error handler below
 app.use((req,res,next) => {
@@ -53,6 +59,7 @@ app.use((req,res,next) => {
 
 // Handle all errors throw
 app.use((error,req,res,next) => {
+    console.log(error.message);
     res.status(error.status || 500);
     res.json({
         error: {
