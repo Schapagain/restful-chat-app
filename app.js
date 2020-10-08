@@ -6,7 +6,6 @@ global.appRoot = path.resolve(__dirname);
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const favicon = require('serve-favicon');
 const {verifyAuthToken_socket} = require('./utils/authorization');
 
 // App routes
@@ -35,13 +34,9 @@ app.use((req,res,next) => {
     next();
 });
 
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-
 // Serve static files
 app.use('/login',express.static('public/login'));
 app.use('/:token',verifyAuthToken_socket,express.static('public/chat'));
-// Serve favicon
-
 
 // Use middleware to handle valid routes
 app.use('/users', userRoutes);
