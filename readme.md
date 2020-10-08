@@ -128,3 +128,49 @@
   * **Return**: { message, chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
   * **Example**:  `[DELETE] /chats/marty123`
   * **Note**: This request deletes messages both sent and received by the user
+
+
+## \# Usage via Sockets
+### User Handling
+1. Register users
+
+  * **Emit**: register
+  * **Payload**: { username (unique),password }
+  * **Listen for**: register-success
+  * **Return**: { message, result { username} }
+  * **Example**: 
+  ```js
+  const handleRegistration = user => {
+    socket.emit('registration',user);
+  }
+
+  socket.on('registration-success', result => {
+      // do something
+  });
+   
+  socket.on('registration-failure', result => {
+      // do something
+  })  
+
+  ```
+
+2. Login users
+
+  * **Emit**: login
+  * **Payload**: { username ,password }
+  * **Listen for**: login-success/failure
+  * **Return**: { message, token }
+  * **Example**: 
+  ```js
+  const handleLogin = (user) => {
+    socket.emit('login',user);
+  }
+
+  socket.on('login-success', result => {
+      // do something
+  })
+
+  socket.on('login-failure', result => {
+      // do something
+  })  
+  ```
