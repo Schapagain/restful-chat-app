@@ -6,6 +6,10 @@ $('form').submit((e)  => {
     return false;
 });
 
+socket.on('broadcast-message',msg => {
+    handleBroadcastMsg(msg);
+})
+
 socket.on('chat-message', msg => {
     handleIncomingChatMsg(msg);
 });
@@ -34,6 +38,10 @@ const handleOutgoingChatMsg = () => {
     
     // Add ownmessage to the chat-box
     $('#messages').append(messageDiv.append(metaMesage,textmessage));
+}
+
+const handleBroadcastMsg = msg => {
+    $('#messages').append($('<div class="broadcast-message">').text(msg.message));
 }
 
 const getUserToken = () => {

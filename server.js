@@ -28,6 +28,13 @@ io.on('connection',socket => {
 
 io.of('/chat').on('connection', socket => {
     console.log('Someone connected to chat');
+    const userToken = getTokenFromURL(socket.handshake.headers.referer);
+    const username = verifyAuthToken(userToken);
+    if (username){
+        socket.broadcast.emit('broadcast-message',{
+            message: username.concat(' has joined the chat'),
+        })
+    }
 
     socket.on('chat-message',msg => {
         const username = verifyAuthToken(msg.userToken);
@@ -45,3 +52,10 @@ const verifyAuthToken = userToken => {
       return null;
     }
  }
+
+ const getTokenFromURL = urlString => {
+    const url = new URL(urlString);
+    const parameters = new URLSearchParams(url.search);
+    const userToken = parameters.get('token');
+    return userToken == null? '':userToken;
+}
