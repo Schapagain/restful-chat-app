@@ -35,11 +35,13 @@ app.use((req,res,next) => {
     next();
 });
 
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+
 // Serve static files
 app.use('/login',express.static('public/login'));
 app.use('/:token',verifyAuthToken_socket,express.static('public/chat'));
 // Serve favicon
-app.use(favicon('public/images/favicon.ico'));
+
 
 // Use middleware to handle valid routes
 app.use('/users', userRoutes);
