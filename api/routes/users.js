@@ -6,6 +6,8 @@ const router = express.Router();
 const db = require(appRoot.concat('/db'));
 const upload = require(appRoot.concat('/utils/image-upload'))
 const {verifyAuthToken} = require(appRoot.concat('/utils/authorization'))
+const serverAddress = 'http://localhost:' + process.env.PORT;
+const {getUser_http} = require(appRoot.concat('/api/drivers/users'));
 
 router.get('/',verifyAuthToken,(req,res,next) => {
     const queryString = "SELECT * FROM users";
@@ -25,32 +27,7 @@ router.get('/',verifyAuthToken,(req,res,next) => {
     }); 
 });
 
-router.get('/:username',verifyAuthToken, (req,res,next) => {
-    const username = req.params.username;
-    const queryString = "SELECT * FROM users WHERE username=$1";
-    const queryValues = [username];
-
-    db.query(queryString,queryValues)
-    .then(result => {
-        if (!result.rowCount){
-            res.status(404).json({
-                message: "User not found",
-            });
-        }else{
-
-            res.status(201).json({
-                message: "User was found",
-                user: result.rows[0],
-            });
-        }
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err.message,
-        });
-    });
-});
+router.get('/:username',verifyAuthToken, getUser_http);
 
 router.patch('/:username',verifyAuthToken,upload.single('profile-picture'),(req,res,next) => {
     const username = req.params.username;
@@ -59,7 +36,7 @@ router.patch('/:username',verifyAuthToken,upload.single('profile-picture'),(req,
     // Inject name of the profile picture stored if a valid image was given
     if(profilePicture != null) {
         const extension = profilePicture.originalname.split('.').pop();
-        const profilePictureName = appRoot.concat('/uploads/',username,'.',extension);
+        const profilePictureName = serverAddress.concat('/uploads/',username,'.',extension);
         req.body.profilepicture = profilePictureName;
     };
 
