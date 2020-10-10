@@ -7,6 +7,10 @@ const server = http.createServer(app);
 const io = socketio(server);
 server.listen(port);
 
+
+const fs = require('fs');
+
+
 // Imports for socket
 // Refactor later
 const registerDriver = require('./api/drivers/register');
@@ -36,32 +40,39 @@ io.of('/chat').on('connection', socket => {
     // Welcome message
     socket.emit('broadcast-message',{
         message: "Welcome to ChatApp, ".concat(username),
+        username: "ChatApp Bot",
     })
 
     // Notify others of new connection
     if (username){
         socket.broadcast.emit('broadcast-message',{
             message: username.concat(' has joined the chat'),
+            username: "ChatApp Bot",
         })
     }else{
         socket.disconnect();
     }
 
+    // Handle other events
     socket.on('get-user', userToken => {
         const username = getUsernameFromToken(userToken);
+        console.log('got a request to get user:',username);
         userDriver.getUser(socket,username);
     })
 
     socket.on('chat-message',msg => {
         const username = getUsernameFromToken(msg.userToken);
         if (username){
-            socket.broadcast.emit('chat-message',{username,message:msg.message});
+            delete msg.userToken;
+            msg.username = username;
+            socket.broadcast.emit('chat-message',msg);
         }
     })
 
     socket.on('disconnect', () => {
         socket.broadcast.emit('broadcast-message',{
             message: username.concat(' has left the chat'),
+            username: "ChatApp Bot",
         })
     })
 })
