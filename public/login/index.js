@@ -36,15 +36,15 @@ const togglePanel = () => {
     $('#toggleLoginRegistration').html(`${register? 'Alredy':'Not'} a user? ${register? 'Log In':'Register'} here`)
 }
 
-socket.on('login-success', result => {
-    console.log(result);
-    // redirect to chat after authentication
-    window.location = 'http://localhost:3000/'.concat(result.token,'?token=',result.token);
-});
+socket.on('login-response', result => {
 
-socket.on('login-failure', result => {
-    $('#error').html(result.error);
-    $('input').addClass('error-border');
+    if (result.success){
+        window.location = 'http://localhost:3000/'.concat(result.token,'?token=',result.token);
+    }else{
+        $('#error').html(result.error);
+        $('input').addClass('error-border');
+    }
+    
 });
 
 socket.on('registration-success', result => {
