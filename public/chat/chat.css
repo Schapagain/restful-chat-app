@@ -4,11 +4,12 @@
         padding:0;
         box-sizing: border-box;
     }
+
     #main-cointainer {
         padding:10px;
         display: flex;
         justify-content: space-between ;
-        min-height: 100vh;
+        height: 100vh;
         background-color:hsl(0,0%,79%);
     }
     #chat-box {
@@ -20,29 +21,28 @@
         background-color: rgb(155, 166, 173);
     }
     #messages {
-
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
-        height: 93%;
+        overflow-y:auto;
+        overflow-x: hidden;
+        height: 100%;
     }
 
-    #messages li {
-        list-style: none;
+    #messages > div {
         padding: 10px;
         margin-bottom: 8px;
-        width: 50%;
         border-radius: 10px;
     }
 
     .own-message {
         background-color: antiquewhite;
         align-self: flex-end;
-        justify-content: center;
+        width: 50%;
     }
 
     .other-message {
         background-color:azure;
+        width: 50%;
     }
 
     form {
@@ -53,32 +53,42 @@
         border-radius: 5px;
 
         display: flex;
-        justify-content:space-between;
     }
 
     #message {
-        width: 80%;
+        width: 90%;
         padding: inherit;
         margin:5px;
     }
 
+    #image-upload{
+        display: inline-block;
+        width: 5%;
+        min-width: 40px;
+        padding: inherit;
+        margin: 5px
+    }
+
+    #send {
+        width: 5%;
+        min-width: 40px;
+        padding: inherit;
+        margin:5px;
+        display: block;
+    }
+
     .broadcast-message {
-        width: 100%;
-        align-self: center;
+        width: 80%;
         border-radius: 5px;
-        background-color: darkgrey;
+        background-color: hsl(0, 0%, 79%);
         padding: 10px;
         margin: 10px;
+        text-align: center;
+        align-self: center;
     }
     .meta-message {
         color: gray;
         font-size: x-small;
-    }
-
-    #send {
-        width: 20%;
-        padding: inherit;
-        margin:5px;
     }
 
     #profile {
@@ -98,7 +108,7 @@
         width: 68%;
     }
 
-    #profile-pic img {
+    #profile-pic img,.other-message img,.own-message img {
         display: block;
         width: 100%;
     }

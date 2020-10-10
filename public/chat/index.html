@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="chat.css">
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://kit.fontawesome.com/013a54f5d5.js" crossorigin="anonymous"></script>
         <script defer src="chat.js"></script>
     </head>
     <body>
@@ -19,7 +20,10 @@
                 </div>
                 <form action="#">
                     <input id="message" autocomplete="off" required /> 
-                    <button id="send">Send</button>
+                    <label id="image-upload" class="fas fa-image fa-2x" for="image">
+                        <input type="file" id="image" style="display: none" accept=".png, .jpg, .jpeg" />
+                    </label>
+                    <button id="send"><i class='fas fa-paper-plane'></i></button>
                 </form>
             </div>
         </div>
