@@ -7,10 +7,6 @@ const server = http.createServer(app);
 const io = socketio(server);
 server.listen(port);
 
-
-const fs = require('fs');
-
-
 // Imports for socket
 // Refactor later
 const registerDriver = require('./api/drivers/register');
