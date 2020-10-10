@@ -7,27 +7,10 @@ const db = require(appRoot.concat('/db'));
 const upload = require(appRoot.concat('/utils/image-upload'))
 const {verifyAuthToken} = require(appRoot.concat('/utils/authorization'))
 const serverAddress = 'http://localhost:' + process.env.PORT;
-const {getUser_http} = require(appRoot.concat('/api/drivers/users'));
+const usersDriver = require(appRoot.concat('/api/drivers/users'));
 
-router.get('/',verifyAuthToken,(req,res,next) => {
-    const queryString = "SELECT * FROM users";
-
-    db.query(queryString)
-    .then(result => {
-        res.status(201).json({
-            message: "These are all the users:",
-            users: result.rows,
-        });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err.message,
-        });
-    }); 
-});
-
-router.get('/:username',verifyAuthToken, getUser_http);
+router.get('/',verifyAuthToken, usersDriver.getUsers);
+router.get('/:username',verifyAuthToken, usersDriver.getUser);
 
 router.patch('/:username',verifyAuthToken,upload.single('profile-picture'),(req,res,next) => {
     const username = req.params.username;
@@ -73,53 +56,6 @@ router.patch('/:username',verifyAuthToken,upload.single('profile-picture'),(req,
     });
 });
 
-router.delete('/:username',verifyAuthToken, (req,res,next) => {
-    const username = req.params.username;
-    const queryString = "DELETE FROM users WHERE username=$1 RETURNING *";
-    const queryValues = [username];
-
-    db.query(queryString,queryValues)
-    .then( result => {
-
-        if (!result.rowCount){
-            res.status(404).json({
-                message: "User not found",
-            });
-        }else{
-            removeUserLogin(username)
-            .then( () => removeChatReceived(username)
-                .then( () => {
-                    res.status(200).json({
-                        message : "User removed successfully",
-                        user: result.rows[0],
-                    })
-                })
-            )
-        }
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err,
-        });
-    });
-});
-
-const removeUserLogin = username => {
-    const queryString = "DELETE from login WHERE username=$1";
-    const queryValues = [username];
-    return db
-        .query(queryString,queryValues)
-        .catch( err => console.log(err));
-}
-
-const removeChatReceived = username => {
-    const queryString = "DELETE FROM chats WHERE receiver=$1";
-    const queryValues = [username];
-    return db
-        .query(queryString,queryValues)
-        .catch( err => console.log(err));
-
-}
+router.delete('/:username',verifyAuthToken, usersDriver.deleteUser);
 
 module.exports = router;
