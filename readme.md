@@ -53,7 +53,7 @@
   * **Endpoint**: /register
   * **Method**: POST
   * **Payload**: { username (unique),password }
-  * **Return**: { message, result { username} }
+  * **Return**: { success , username } 
   * **Example**:  `[POST] /register`
 
 2. Login users
@@ -61,7 +61,7 @@
   * **Endpoint**: /login
   * **Method**: POST
   * **Payload**: { username ,password }
-  * **Return**: { message, token }
+  * **Return**: { success , token }
   * **Example**:  `[POST] /login`
 
 
@@ -69,7 +69,7 @@
 
   * **Endpoint**: /users
   * **Method**: GET
-  * **Return**: { message, users [ { firstname, lastname, cellnumber, username } ] }
+  * **Return**: { success , users [ { firstname, lastname, cellnumber, username } ] }
   * **Example**:  `[GET] /users`
 
 4. Get user by username
@@ -77,7 +77,7 @@
   * **Endpoint**: /users
   * **Method**: GET
   * **URL param**: username
-  * **Return**: { message, user { firstname, lastname, cellnumber, username } }
+  * **Return**: { success , user { firstname, lastname, cellnumber, username } }
   * **Example**:  `[GET] /users/bob123`
 
  5. Update user info
@@ -86,7 +86,7 @@
   * **Method**: PATCH
   * **URL param**: username
   * **Payload**: { firstname, lastname, cellnumber, profilepicture }
-  * **Return**: { message, user { firstname, lastname, cellnumber, username, profilepicture } }
+  * **Return**: { success , user { firstname, lastname, cellnumber, username, profilepicture } }
   * **Example**:  `[PATCH] /users/bob123` 
   * **Note**: Any number of key:value pairs can be passed
 
@@ -95,21 +95,21 @@
   * **Endpoint**: /users
   * **Method**: DELETE
   * **URL param**: username
-  * **Return**: { message, user { firstname, lastname, cellnumber, username } }
+  * **Return**: { success , user { firstname, lastname, cellnumber, username } }
   * **Example**:  `[DELETE] /users/bob123`
 
 ### Chat handling
 1. Get all chats
   * **Endpoint**: /chats
   * **Method**: GET
-  * **Return**: { message, chats [ { sender, message, receiver } ] }
+  * **Return**: { success , chats [ { sender, message, receiver } ] }
   * **Example**:  `[GET] /chats`
 
 2. Add chat
   * **Endpoint**: /chats
   * **Method**: POST
   * **Payload**: { sender, message, receiver }
-  * **Return**: { message, chat { sender, message, receiver } }
+  * **Return**: { success , chat { sender, message, receiver } }
   * **Example**:  `[POST] /chats`
 
 
@@ -117,7 +117,7 @@
   * **Endpoint**: /chats
   * **Method**: GET
   * **URL param**: username
-  * **Return**: { message, chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
+  * **Return**: { success , chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
   * **Example**:  `[GET] /chats/marty123`
 
 4. Delete chat by username
@@ -125,7 +125,7 @@
   * **Endpoint**: /chats
   * **Method**: DELETE
   * **URL param**: username
-  * **Return**: { message, chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
+  * **Return**: { success , chats { sent [{sender, message,receiver}], received [{sender, message,receiver}] } }
   * **Example**:  `[DELETE] /chats/marty123`
   * **Note**: This request deletes messages both sent and received by the user
 
@@ -136,22 +136,17 @@
 
   * **Emit**: register
   * **Payload**: { username (unique),password }
-  * **Listen for**: register-success
-  * **Return**: { message, result { username} }
+  * **Listen for**: register-response
+  * **Return**: { success, username }
   * **Example**: 
   ```js
   const handleRegistration = user => {
     socket.emit('registration',user);
   }
 
-  socket.on('registration-success', result => {
+  socket.on('registration-response', result => {
       // do something
   });
-   
-  socket.on('registration-failure', result => {
-      // do something
-  })  
-
   ```
 
 2. Login users
@@ -159,18 +154,31 @@
   * **Emit**: login
   * **Payload**: { username ,password }
   * **Listen for**: login-success/failure
-  * **Return**: { message, token }
+  * **Return**: { success , token }
   * **Example**: 
   ```js
-  const handleLogin = (user) => {
+  const handleLogin = user => {
     socket.emit('login',user);
   }
 
-  socket.on('login-success', result => {
+  socket.on('login-response', result => {
       // do something
   })
+  ```
 
-  socket.on('login-failure', result => {
+3. Get user by username
+
+  * **Emit**: get-user
+  * **Payload**: { userToken }
+  * **Listen for**: get-user-response
+  * **Return**: { success , { user } }
+  * **Example**: 
+  ```js
+  const getUserProfile = userToken => {
+      socket.emit('get-user', userToken);
+  };
+
+  socket.on('get-user-response', user => {
       // do something
-  })  
+  })
   ```
