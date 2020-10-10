@@ -43,6 +43,32 @@ const deleteUser = async (requestOrSocket,responseOrUsername) => {
     }
 }
 
+const updateUser = async (requestOrSocket,responseOrUser) => {
+    try{
+        const isRequest = requestOrSocket.handshake == null
+        let user = {};
+        if (isRequest){
+            if (requestOrSocket.file){
+                user.profilepicture = requestOrSocket.file.path.split('/uploads/').pop();
+            }
+            user.username = requestOrSocket.params.username;
+            Object.keys(requestOrSocket.body).forEach( key => {
+                user[key] = requestOrSocket.body[key];
+            })
+        }else{
+            user = responseOrUser;
+        }
+
+        const updatedUser = await usersService.updateUser(user);
+        const response = updatedUser? {success: true, updatedUser}:{success: false, error:"User could not be updated"}; 
+        isRequest? responseOrUser.status(200).json(response):requestOrSocket.emit("update-user-response",response); 
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
 exports.getUser = getUser;
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
+exports.updateUser = updateUser;
