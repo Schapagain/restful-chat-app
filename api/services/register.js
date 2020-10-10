@@ -27,7 +27,7 @@ const register = async user => {
 const initUserProfile = async username => {
     try{
         const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber,profilepicture) VALUES ($1,$2,$3,$4,$5)";
-        const queryValues = [username, '', '', '', serverAddress.concat('/uploads/dummy.jpeg')];
+        const queryValues = [username, '', '', '', serverAddress.concat('/uploads/dummy.png')];
         const queryResult = await db.query(queryString, queryValues)
         return true;
     }
@@ -47,7 +47,8 @@ const registerUser = async user => {
         } else {
             const newPasswordHash = await generatePasswordHash(user.password);
             const newUser = { username: newUsername, password: newPasswordHash };
-            return await addUserCredentials(newUser)
+            const addedUser = await addUserCredentials(newUser);
+            return addedUser.username;
         }
     }
     catch(err){
