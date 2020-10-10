@@ -9,20 +9,21 @@ server.listen(port);
 
 // Imports for socket
 // Refactor later
-const { register_socket } = require('./api/drivers/register');
-const { login_socket } = require('./api/drivers/login');
-const { getUser_socket } = require('./api/drivers/users');
+const registerDriver = require('./api/drivers/register');
+const loginDriver = require('./api/drivers/login');
 const { getUsernameFromToken } = require('./utils/authorization');
+const userDriver = require('./api/drivers/users');
 
 io.on('connection',socket => {
     console.log('Someone connected!');
 
     socket.on('registration', user => {
-        register_socket(socket,user);
+        registerDriver(socket,user);
     })
 
     socket.on('login', user => {
-        login_socket(socket,user);
+        console.log('loggin user')
+        loginDriver(socket,user);
     })
 
 })
@@ -42,8 +43,14 @@ io.of('/chat').on('connection', socket => {
         socket.broadcast.emit('broadcast-message',{
             message: username.concat(' has joined the chat'),
         })
-        getUser_socket(socket,username);
+    }else{
+        socket.disconnect();
     }
+
+    socket.on('get-user', userToken => {
+        const username = getUsernameFromToken(userToken);
+        userDriver.getUser(socket,username);
+    })
 
     socket.on('chat-message',msg => {
         const username = getUsernameFromToken(msg.userToken);
