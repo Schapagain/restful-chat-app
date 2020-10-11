@@ -56,7 +56,7 @@ io.of('/chat').on('connection', socket => {
         userDriver.getUser(socket,username);
     })
 
-    socket.on('update-user', user, userToken => {
+    socket.on('update-user', ({user, userToken}) => {
         const username = getUsernameFromToken(userToken);
         user.username = username;
         userDriver.updateUser(socket,user);
