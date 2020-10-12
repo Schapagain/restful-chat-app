@@ -6,13 +6,13 @@ const serverAddress = process.env.SERVERADDRESS+process.env.PORT;
 
 const register = async user => {
     try{
-        ({ username, password } = user);
-        if (!username || !password) {
+        ({ username, password, firstname, lastname } = user);
+        if (!username || !password || !firstname || !lastname) {
             return false;
         }
 
-        const returnedUsername = await registerUser(user)
-        const initializedProfile = await initUserProfile(returnedUsername)
+        const returnedUsername = await registerUser({username: user.username, password: user.password})
+        const initializedProfile = await initUserProfile({username: user.username, firstname: user.firstname, lastname: user.lastname})
         if (returnedUsername && initializedProfile){
             return returnedUsername;
         }
@@ -24,10 +24,10 @@ const register = async user => {
     }
 };
 
-const initUserProfile = async username => {
+const initUserProfile = async user => {
     try{
         const queryString = "INSERT INTO users (username,firstname,lastname,cellnumber,profilepicture) VALUES ($1,$2,$3,$4,$5)";
-        const queryValues = [username, '', '', '', serverAddress.concat('/uploads/dummy.png')];
+        const queryValues = [user.username,user.firstname,user.lastname, '', serverAddress.concat('/uploads/dummy.png')];
         const queryResult = await db.query(queryString, queryValues)
         return true;
     }

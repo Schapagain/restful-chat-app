@@ -24,6 +24,7 @@ const getUser = async (requestOrSocket,responseOrUsername) => {
         const user = await usersService.getUser(username);
         const response = user? {success: true, user,}:{success:false, error:"User could not be fetched"}; 
         isRequest? responseOrUsername.status(200).json(response):requestOrSocket.emit("get-user-response",response); 
+        return user;
     }
     catch(err){
         console.log(err);

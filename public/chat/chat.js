@@ -100,8 +100,6 @@ const getUserToken = () => {
     return userToken == null? '':userToken;
 }
 
-const getCurrentTime = () => new Date().toLocaleTimeString();
-
 const getUserProfile = userToken => {
     socket.emit('get-user', userToken);
 };
