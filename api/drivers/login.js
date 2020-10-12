@@ -7,7 +7,7 @@ const loginDriver = async (requestOrSocket,responseOrUser) => {
     const user = isRequest? {username: requestOrSocket.body.username, password: requestOrSocket.body.password}:responseOrUser;
     const token = await loginService(user);
     const response = token? {success: true, token,}:{status: false, error:"Not authorized"};
-    console.log('emitting..');
     isRequest? responseOrUser.status(200).json(response):requestOrSocket.emit("login-response",response);
+    return token;
 }
 module.exports = loginDriver;
