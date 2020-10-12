@@ -14,6 +14,9 @@ const loginDriver = require('./api/drivers/login');
 const { getUsernameFromToken } = require('./utils/authorization');
 const userDriver = require('./api/drivers/users');
 
+activeProfiles = {};
+userToSocket = {};
+socketToUser = {};
 io.on('connection',socket => {
     console.log('Someone connected!');
 
@@ -23,10 +26,18 @@ io.on('connection',socket => {
     })
 
     socket.on('login', user => {
-        loginDriver(socket,user);
+        const token = loginDriver(socket,user);
+        if (token){
+            userToSocket[user.username] = socket.id;
+            socketToUser[socket.id] = user.username;
+
+            // Pass in all other active users on login
+            socket.emit('get-online-users-success',activeProfiles)
+        }
+        
     })
 
-    socket.on('get-user-onload',userToken => {
+    socket.on('get-user-onload',async userToken => {
         const username = getUsernameFromToken(userToken);
 
         if(username){
@@ -40,11 +51,25 @@ io.on('connection',socket => {
                 message: username.concat(' has joined the chat'),
                 firstname: "ChatApp Bot",
             })
+
+            // Emit user profile to client
+            const user = await userDriver.getUser(socket,username);
+
+            // Add profile to the list of active users
+            activeProfiles[username] = user;
+
+            // Release new user to others
+            socket.broadcast.emit('online-update',{
+                online: true,
+                user
+            });
+
+            console.log('active users:',userToSocket,socketToUser,activeProfiles);
+
         }else{
             socket.disconnect();
         }
 
-        userDriver.getUser(socket,username);
 
     })
 
@@ -55,6 +80,23 @@ io.on('connection',socket => {
             delete msg.userToken;
             socket.broadcast.emit('chat-message',msg);
         }
+    })
+
+    socket.on('disconnect', () => {
+        const username = socketToUser[socket.id];
+        socket.broadcast.emit('broadcast-message',{
+            message: username + ' has left the chat',
+            username: "ChatApp Bot",
+            firstname: "ChatApp Bot",
+        })
+        delete socketToUser[socket.id];
+        delete userToSocket[username];
+        delete activeProfiles[username];
+
+        socket.broadcast.emit('online-update',{
+            online:false,
+            username
+        })
     })
 
 })
