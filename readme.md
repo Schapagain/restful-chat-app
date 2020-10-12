@@ -180,5 +180,76 @@
 
   socket.on('get-user-response', user => {
       // do something
-  })
+  });
+  ```
+
+4. Get user profile after login
+* **Emit**: get-user-onload
+* **Payload**: { userToken }
+* **Listen for**: get-user-response
+* **Return**: { success , { user } }
+* **Example**: 
+```js
+  socket.emit('get-user-onload',userToken);
+
+  socket.on('get-user-response', user => {
+      // do something
+  });
+```
+* **Note**: This differs from #3 above since during this the server sends a welcome <br/>
+message to the logged in user, and also notifies other users of their presence,<br/>
+via a broadcast-message ( See #9 below ).
+
+5. Get currently online users after login
+
+  * **Listen for**: get-online-users-success
+  * **Return**: { { user } }
+  * **Example**: 
+  ```js
+    socket.on('get-online-users-success',onlineUsers=>{
+        // do something
+    });
+  ```
+
+6. Receive updates when users come (go) online (offline)
+
+  * **Listen for**: online-update
+  * **Return**: { online, { user } }
+  * **Example**: 
+  ```js
+    socket.on('online-update',result => {
+      // do something
+    });
+  ```
+
+7. Send a chat message
+  * **Emit**: chat-message
+  * **Payload**: { message, token, firstname }
+  * **Example**: 
+  ```js
+    socket.emit('chat-message',{
+      message:"Hello, World!",
+      userToken: "Xy2kxv8",
+      firstname: "Tommy"
+    });
+  ```
+
+8. Receive a chat message
+  * **Listen for**: chat-message
+  * **Return**: { message, username, firstname }
+  * **Example**: 
+  ```js
+    socket.on('chat-message', msg => {
+      // do something
+    });
+  ```
+
+9. Receive a broadcast message
+  * **Listen for**: broadcast-message
+  * **Return**: { message, username: "ChatApp Bot" , firstname: "ChatApp Bot" }
+  * **Example**: 
+  ```js
+    socket.on('broadcast-message', msg => {
+      // do something
+    });
   ```
