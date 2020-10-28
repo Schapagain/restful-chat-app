@@ -1,0 +1,19 @@
+
+
+button {
+    width: 50%;
+    padding: inherit;
+}
+  
+input {
+    text-align: center;
+    padding: inherit;
+    width: 70%;
+    border-radius: 2px;
+    border:thin;
+    margin:3px;
+}
+
+#password {
+    margin-bottom: 5px;
+}

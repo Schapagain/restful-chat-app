@@ -1,0 +1,117 @@
+
+#chat-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+  
+  #profile-banner {
+    display: flex;
+    height: 10%;
+    min-height: 70px;
+  }
+  
+  #profile-picture{
+    width: 18%;
+  }
+  
+  #profile-picture>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+  
+  #profile-info{
+    background-color: rgb(110, 159, 216);
+    width: 82%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  
+  #messages {
+    display: flex;
+    flex-direction: column;
+    overflow-y:auto;
+    overflow-x: hidden;
+    height: 83%;
+  }
+  
+  #messages > div {
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+  }
+  
+  .message {
+    color:black;
+    width: 50%;
+  }
+  
+  .message>img{
+    width: 100%;
+    margin: auto;
+  }
+  
+  .own-message {
+    background-color: antiquewhite;
+    align-self: flex-end;
+  }
+  
+  .other-message {
+    background-color:azure;
+  }
+  
+  #chat-form {
+    background-color: hsl(0,0%,69%);
+    padding: 5px;
+    width: 100%;
+    height: 7%;
+    border-radius: 5px;
+    display: flex;
+    min-height: 50px;
+  }
+  
+  #messageBox {
+    text-align: left;
+    width: 90%;
+    padding: inherit;
+    margin:5px;
+  }
+  
+  #image-upload{
+    display: inline-block;
+    width: 2%;
+    min-width: 40px;
+    padding: inherit;
+    margin: 5px;
+  }
+  
+  #image{
+    display: none;
+    width: 2%;
+  }
+  
+  #send {
+    width: 8%;
+    min-width: 40px;
+    padding: inherit;
+    margin:5px;
+    display: block;
+  }
+  
+  .broadcast-message {
+    width: 100%;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 79%);
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    align-self: center;
+  }
+  .meta-message {
+    color: gray;
+    font-size: x-small;
+  }
