@@ -21,7 +21,6 @@ io.on('connection',socket => {
     console.log('Someone connected!');
 
     socket.on('registration', user => {
-        console.log(user);
         registerDriver(socket,user);
     })
 
@@ -31,8 +30,6 @@ io.on('connection',socket => {
             userToSocket[user.username] = socket.id;
             socketToUser[socket.id] = user.username;
 
-            // Pass in all other active users on login
-            socket.emit('get-online-users-success',activeProfiles)
         }
         
     })
@@ -54,7 +51,11 @@ io.on('connection',socket => {
 
             // Emit user profile to client
             const user = await userDriver.getUser(socket,username);
-
+            
+            // Pass in all other active users 
+            console.log('emitting active profiles',activeProfiles)
+            socket.emit('get-online-users-success',activeProfiles)
+            
             // Add profile to the list of active users
             activeProfiles[username] = user;
 
@@ -64,21 +65,18 @@ io.on('connection',socket => {
                 user
             });
 
-            console.log('active users:',userToSocket,socketToUser,activeProfiles);
-
         }else{
             socket.disconnect();
         }
-
 
     })
 
     socket.on('chat-message',msg => {
         const username = getUsernameFromToken(msg.userToken);
-        console.log('got message from',username);
         if (username){
             delete msg.userToken;
-            socket.broadcast.emit('chat-message',msg);
+            const receiverSocket = userToSocket[msg.receiver];
+            io.to(receiverSocket).emit('chat-message',msg);
         }
     })
 
@@ -100,59 +98,3 @@ io.on('connection',socket => {
     })
 
 })
-
-// io.of('/chat').on('connection', socket => {
-
-    // const userToken = getTokenFromURL(socket.handshake.headers.referer);
-    // const username = getUsernameFromToken(userToken);
-
-    // // Welcome message
-
-
-    // // Notify others of new connection
-    // if (username){
-    //     socket.broadcast.emit('broadcast-message',{
-    //         message: username.concat(' has joined the chat'),
-    //         username: "ChatApp Bot",
-    //     })
-    // }else{
-    //     socket.disconnect();
-    // }
-
-//     // Handle other events
-//     socket.on('get-user', userToken => {
-//         const username = getUsernameFromToken(userToken);
-//         console.log('got a request to get user:',username);
-//         userDriver.getUser(socket,username);
-//     })
-
-//     socket.on('update-user', ({user, userToken}) => {
-//         const username = getUsernameFromToken(userToken);
-//         user.username = username;
-//         userDriver.updateUser(socket,user);
-//     })
-
-//     socket.on('chat-message',msg => {
-//         const username = getUsernameFromToken(msg.userToken);
-//         if (username){
-//             delete msg.userToken;
-//             msg.username = username;
-//             socket.broadcast.emit('chat-message',msg);
-//         }
-//     })
-
-//     socket.on('disconnect', () => {
-//         socket.broadcast.emit('broadcast-message',{
-//             message: username.concat(' has left the chat'),
-//             username: "ChatApp Bot",
-//         })
-//     })
-// })
-
-
- const getTokenFromURL = urlString => {
-    const url = new URL(urlString);
-    const parameters = new URLSearchParams(url.search);
-    const userToken = parameters.get('token');
-    return userToken == null? '':userToken;
-}
