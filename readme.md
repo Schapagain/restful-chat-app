@@ -130,7 +130,7 @@
   * **Note**: This request deletes messages both sent and received by the user
 
 
-## \# Usage via Sockets
+## \# Events
 ### User Handling
 1. Register users
 
